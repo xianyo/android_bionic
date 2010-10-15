@@ -19,7 +19,11 @@ else
 # extra objcopy step to rename symbols causes the resulting binary to be misaligned
 # and unloadable.  Increasing the alignment adds an extra 3840 bytes in padding
 # but switching to gold saves about 1M of space.
-LINKER_TEXT_BASE := 0xB0001000
+    ifeq ($(TARGET_KERNEL_2G),true)
+      LINKER_TEXT_BASE := 0x70001000
+    else
+      LINKER_TEXT_BASE := 0xB0001000
+    endif
 endif
 
 # The maximum size set aside for the linker, from
@@ -56,6 +60,10 @@ else
       $(error Unsupported TARGET_ARCH $(TARGET_ARCH))
     endif
   endif
+endif
+
+ifeq ($(TARGET_KERNEL_2G),true)
+LOCAL_CFLAGS += -DKERNEL_IS_2G
 endif
 
 LOCAL_MODULE:= linker
