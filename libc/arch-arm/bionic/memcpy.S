@@ -29,7 +29,10 @@
 #include <machine/cpu-features.h>
 #include <machine/asm.h>
 
-#if defined(__ARM_NEON__)
+/* disable NEON memcpy on mx6x since all memory performance tools show 
+   neon memcpy performance is worse than arm (non-neon) memcpy, seems
+   it is a common issue on ARM Cortex-A9 chip, need ARM's final confirm */
+#if defined(__ARM_NEON__) && defined(USE_NEON_MEMCPY) 
 
         .text
         .fpu    neon
