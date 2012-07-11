@@ -332,6 +332,9 @@ static void malloc_init_impl(void)
         case 10:
             so_name = "/system/lib/libc_malloc_debug_leak.so";
             break;
+        case 15:
+            so_name = "/system/lib/libefence.so";
+            break;
         case 20:
             // Quick check: debug level 20 can only be handled in emulator.
             if (!qemu_running) {
@@ -436,6 +439,21 @@ static void malloc_init_impl(void)
                 dlsym(libc_malloc_impl_handle, "chk_realloc");
             gMallocUse.memalign =
                 dlsym(libc_malloc_impl_handle, "chk_memalign");
+            break;
+        case 15:
+            __libc_android_log_print(ANDROID_LOG_INFO, "libc",
+                    "%s using MALLOC_DEBUG = %d (efence)\n",
+                    __progname, debug_level);
+            gMallocUse.malloc =
+                dlsym(libc_malloc_impl_handle, "efence_malloc");
+            gMallocUse.free =
+                dlsym(libc_malloc_impl_handle, "efence_free");
+            gMallocUse.calloc =
+                dlsym(libc_malloc_impl_handle, "efence_calloc");
+            gMallocUse.realloc =
+                dlsym(libc_malloc_impl_handle, "efence_realloc");
+            gMallocUse.memalign =
+                dlsym(libc_malloc_impl_handle, "efence_memalign");
             break;
         case 20:
             __libc_android_log_print(ANDROID_LOG_INFO, "libc",
