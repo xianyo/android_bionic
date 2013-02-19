@@ -185,6 +185,7 @@ int     faccessat(int, const char *, int, int)  334,307,300
 int     symlink(const char *, const char *)  83
 int     fchdir(int)    133
 int     truncate(const char*, off_t)    92
+int     truncate64(const char*, off64_t)    193,193,211
 int     setxattr(const char *, const char *, const void *, size_t, int) 226,226,224
 int     lsetxattr(const char *, const char *, const void *, size_t, int) 227,227,225
 ssize_t getxattr(const char *, const char *, void *, size_t) 229,229,227
